@@ -43,21 +43,21 @@ public final class BungeePluginManagerCommand extends Command {
             case "unload":
             case "ul":
                 if (args.length < 2) {
-                    sender.sendMessage(textWithColor("Usage: /bpm unload <plugin>", RED));
+                    sender.sendMessage(textWithColor("用法: /bpm unload <plugin>", RED));
                 }
                 unloadPlugin(sender, args[1]);
                 break;
             case "load":
             case "l":
                 if (args.length < 2) {
-                    sender.sendMessage(textWithColor("Usage: /bpm load <plugin>", RED));
+                    sender.sendMessage(textWithColor("用法: /bpm load <plugin>", RED));
                 }
                 loadPlugin(sender, args[1]);
                 break;
             case "reload":
             case "r":
                 if (args.length < 2) {
-                    sender.sendMessage(textWithColor("Usage: /bpm reload <plugin>", RED));
+                    sender.sendMessage(textWithColor("用法: /bpm reload <plugin>", RED));
                 }
                 reloadPlugin(sender, args[1]);
                 break;
@@ -66,7 +66,7 @@ public final class BungeePluginManagerCommand extends Command {
                 listPlugins(sender);
                 break;
             default:
-                sender.sendMessage(textWithColor("Command not found. Type /bpm help to see available commands.", RED));
+                sender.sendMessage(textWithColor("没有找到本命令。尝试输入 /bpm help 来查看更多命令。", RED));
                 break;
         }
     }
@@ -74,45 +74,45 @@ public final class BungeePluginManagerCommand extends Command {
     private void unloadPlugin(CommandSender sender, String pluginName) {
         Plugin plugin = findPlugin(pluginName);
         if (plugin == null) {
-            sender.sendMessage(textWithColor(format("Plugin '%s' not found.", pluginName), RED));
+            sender.sendMessage(textWithColor(format("没有找到 '%s' 插件。", pluginName), RED));
             return;
         }
         PluginUtils.unloadPlugin(plugin);
-        sender.sendMessage(textWithColor(format("Plugin '%s' unloaded.", plugin.getDescription().getName()), YELLOW));
+        sender.sendMessage(textWithColor(format("成功卸载 '%s' 插件。", plugin.getDescription().getName()), YELLOW));
     }
 
     private void loadPlugin(CommandSender sender, String pluginName) {
         Plugin plugin = findPlugin(pluginName);
         if (plugin != null) {
-            sender.sendMessage(textWithColor("Plugin is already loaded", RED));
+            sender.sendMessage(textWithColor("插件被成功加载", RED));
             return;
         }
         File file = findFile(pluginName);
         if (!file.exists()) {
-            sender.sendMessage(textWithColor(format("Plugin '%s' not found.", pluginName), RED));
+            sender.sendMessage(textWithColor(format("没有找到 '%s' 插件。", pluginName), RED));
             return;
         }
         boolean success = PluginUtils.loadPlugin(file);
         if (success) {
-            sender.sendMessage(textWithColor("Plugin loaded.", YELLOW));
+            sender.sendMessage(textWithColor("插件已经被加载。", YELLOW));
         } else {
-            sender.sendMessage(textWithColor("Failed to load plugin, see console for more details.", RED));
+            sender.sendMessage(textWithColor("加载插件失败，请查看后台来获取更多信息。", RED));
         }
     }
 
     private void reloadPlugin(CommandSender sender, String pluginName) {
         Plugin plugin = findPlugin(pluginName);
         if (plugin == null) {
-            sender.sendMessage(textWithColor(format("Plugin '%s' not found.", pluginName), RED));
+            sender.sendMessage(textWithColor(format("没有找到 '%s' 插件。", pluginName), RED));
             return;
         }
         File pluginFile = plugin.getFile();
         PluginUtils.unloadPlugin(plugin);
         boolean success = PluginUtils.loadPlugin(pluginFile);
         if (success) {
-            sender.sendMessage(textWithColor("Plugin reloaded.", YELLOW));
+            sender.sendMessage(textWithColor("重载插件成功。", YELLOW));
         } else {
-            sender.sendMessage(textWithColor("Failed to reload plugin, see console for more details.", RED));
+            sender.sendMessage(textWithColor("重载插件失败，请查看后台来获取更多信息。", RED));
         }
     }
 
@@ -172,12 +172,12 @@ public final class BungeePluginManagerCommand extends Command {
     }
     static void sendHelp(CommandSender sender) {
         ComponentBuilder builder = new ComponentBuilder("\n");
-        builder.append("---- BungeePluginManager ----\n").color(GOLD).bold(true);
-        builder.append("/bpm help: ").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "bpm help")).color(GOLD).bold(true).append("Display this message\n", FormatRetention.NONE);
-        builder.append("/bpm load ").event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "bpm load ")).color(GOLD).append("<plugin>: ").color(GREEN).append("Loads a plugin\n", FormatRetention.NONE);
-        builder.append("/bpm unload ").color(GOLD).append("<plugin>: ").color(GREEN).append("Unloads a plugin\n", FormatRetention.NONE);
-        builder.append("/bpm reload ").color(GOLD).append("<plugin>: ").color(GREEN).append("Reloads a plugin\n", FormatRetention.NONE);
-        builder.append("/bpm list: ").color(GOLD).append("List all plugins on the bungee", FormatRetention.NONE);
+        builder.append("---- BungeePluginManager(汉化 by 晏子) ----\n").color(GOLD).bold(true);
+        builder.append("/bpm help: ").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "bpm help")).color(GOLD).bold(true).append("显示帮助信息\n", FormatRetention.NONE);
+        builder.append("/bpm load ").event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "bpm load ")).color(GOLD).append("<plugin>: ").color(GREEN).append("加载插件\n", FormatRetention.NONE);
+        builder.append("/bpm unload ").color(GOLD).append("<plugin>: ").color(GREEN).append("卸载插件\n", FormatRetention.NONE);
+        builder.append("/bpm reload ").color(GOLD).append("<plugin>: ").color(GREEN).append("重载插件\n", FormatRetention.NONE);
+        builder.append("/bpm list: ").color(GOLD).append("列出bungee中所有的插件", FormatRetention.NONE);
 
         sender.sendMessage(builder.create());
     }
